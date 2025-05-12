@@ -1,0 +1,12 @@
+### Healthcheck endpoint
+GET http://localhost:9000/actuator/health
+
+> {%
+  client.test("Request executed successfully", function() {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+
+  client.test("Check status in response body", function() {
+    client.assert(response.body.status === "UP", "Status is not UP");
+  });
+%}
