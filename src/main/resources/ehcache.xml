@@ -11,6 +11,7 @@
     </service>
 
     <cache alias="cnbExchangeRates" uses-template="mins30" />
+    <cache alias="currencyLayerExchangeRates" uses-template="midnight" />
 
     <cache-template name="mins30">
         <expiry>
@@ -29,7 +30,28 @@
             </listener>
         </listeners>
         <resources>
-            <offheap unit="MB">50</offheap>
+            <offheap unit="MB">10</offheap>
+        </resources>
+    </cache-template>
+
+    <cache-template name="midnight">
+        <expiry>
+            <class>cz.pm2k.swaply.config.CacheExpirationMidnight</class>
+        </expiry>
+        <listeners>
+            <listener>
+                <class>cz.pm2k.swaply.config.CacheLogger</class>
+                <event-firing-mode>ASYNCHRONOUS</event-firing-mode>
+                <event-ordering-mode>UNORDERED</event-ordering-mode>
+                <events-to-fire-on>CREATED</events-to-fire-on>
+                <events-to-fire-on>UPDATED</events-to-fire-on>
+                <events-to-fire-on>EXPIRED</events-to-fire-on>
+                <events-to-fire-on>REMOVED</events-to-fire-on>
+                <events-to-fire-on>EVICTED</events-to-fire-on>
+            </listener>
+        </listeners>
+        <resources>
+            <offheap unit="MB">10</offheap>
         </resources>
     </cache-template>
 

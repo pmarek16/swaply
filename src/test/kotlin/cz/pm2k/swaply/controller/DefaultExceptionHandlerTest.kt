@@ -26,7 +26,7 @@ class DefaultExceptionHandlerTest {
 
         @JvmStatic
         fun unknownExceptions() = listOf(
-            SwaplyException(HttpStatus.BAD_REQUEST, ErrorCode.INVALID_REQUEST, MSG),
+            SwaplyException(errorCode = ErrorCode.INVALID_REQUEST, message = MSG),
             IllegalArgumentException(MSG),
             ConstraintViolationException(MSG, setOf(mockk(), mockk())),
         )
@@ -65,7 +65,7 @@ class DefaultExceptionHandlerTest {
     @MethodSource("allHttpErrrorStatuses")
     fun `handleSwaplyException - all http statuses`(status: HttpStatus) {
         // Data
-        val exception = SwaplyException(status, ErrorCode.INVALID_REQUEST,MSG)
+        val exception = SwaplyException(errorCode = ErrorCode.INVALID_REQUEST, httpStatus = status, message = MSG)
 
         // Test
         val response = defaultExceptionHandler.handleSwaplyException(exception)
@@ -81,7 +81,7 @@ class DefaultExceptionHandlerTest {
     @EnumSource(ErrorCode::class)
     fun `handleInvestoryException - all error codes`(errorCode: ErrorCode) {
         // Data
-        val exception = SwaplyException(HttpStatus.I_AM_A_TEAPOT, errorCode,MSG)
+        val exception = SwaplyException(errorCode = errorCode, httpStatus = HttpStatus.I_AM_A_TEAPOT, message = MSG)
 
         // Test
         val response = defaultExceptionHandler.handleSwaplyException(exception)

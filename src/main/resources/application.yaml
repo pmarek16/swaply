@@ -30,3 +30,8 @@ swaply:
       url: https://www.cnb.cz
       connection-timeout: 3000
       read-timeout: 3000
+    currencylayer:
+      url: https://apilayer.net/api
+      connection-timeout: 3000
+      read-timeout: 3000
+      access-key: 25189bd1b995d3b8b726eebfddbf1604

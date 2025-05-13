@@ -28,3 +28,13 @@ GET http://localhost:8080/api/v1/exchange-rate/currency-pairs
     client.assert(response.status === 200, "Response status is not 200");
   });
 %}
+
+### Get exchange rates diff
+@currencyPairCode = CZKHUF
+GET http://127.0.0.1:8080/api/v1/exchange-rate/differences/{{currencyPairCode}}
+
+> {%
+  client.test("Request executed successfully", function() {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}

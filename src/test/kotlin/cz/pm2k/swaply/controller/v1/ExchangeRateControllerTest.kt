@@ -1,9 +1,12 @@
 package cz.pm2k.swaply.controller.v1
 
 import com.ninjasquad.springmockk.MockkBean
+import cz.pm2k.swaply.client.currencylayer.BASE_CURRENCY
 import cz.pm2k.swaply.controller.V1_BASE_URL
 import cz.pm2k.swaply.enum.ErrorCode
 import cz.pm2k.swaply.exception.SwaplyException
+import cz.pm2k.swaply.model.CurrencyPair
+import cz.pm2k.swaply.model.ExchangeRateDiff
 import cz.pm2k.swaply.service.ExchangeRateService
 import io.mockk.every
 import org.springframework.beans.factory.annotation.Autowired
@@ -29,10 +32,13 @@ class ExchangeRateControllerTest(
     @Test
     fun `getCurrencyPairs - happy path`() {
         // Data
-        val rates = listOf("CZKHUF", "CZKNZD")
+        val rates = listOf(
+            CurrencyPair(BASE_CURRENCY,"HUF", 6.150),
+            CurrencyPair(BASE_CURRENCY,"NZD", 13.217),
+        )
 
         // Behaviour
-        every { exchangeRateService.getCnbCurrencyPairs() } returns rates
+        every { exchangeRateService.getCnbRates() } returns rates
 
         // Test
         mockMvc.perform(
@@ -50,8 +56,7 @@ class ExchangeRateControllerTest(
     @Test
     fun `getCurrencyPairs - cnb service not available`() {
         // Behaviour
-        val errorCode = ErrorCode.CNB_EXCHANGE_RATES_FAILED
-        every { exchangeRateService.getCnbCurrencyPairs() } throws SwaplyException(errorCode.httpStatus, errorCode,"CNB service not available")
+        every { exchangeRateService.getCnbRates() } throws SwaplyException(errorCode = ErrorCode.CNB_EXCHANGE_RATES_FAILED, message = "CNB service not available")
 
         // Test
         mockMvc.perform(
@@ -63,6 +68,49 @@ class ExchangeRateControllerTest(
             .andExpect(jsonPath("$.status").value(ErrorCode.CNB_EXCHANGE_RATES_FAILED.httpStatus.value()))
             .andExpect(jsonPath("$.code").value(ErrorCode.CNB_EXCHANGE_RATES_FAILED.name))
             .andExpect(jsonPath("$.message").value("CNB service not available"))
+    }
+
+    @Test
+    fun `getDifferences - happy path`() {
+        // Data
+        val currencyPairCode = "CZKHUF"
+        val diff = ExchangeRateDiff(
+            pairCode = currencyPairCode,
+            rateDiff = 0.123456,
+        )
+
+        // Behaviour
+        every { exchangeRateService.getCurrencyLayerDiffs(currencyPairCode) } returns diff
+
+        // Test
+        mockMvc.perform(
+            get("/$V1_BASE_URL/exchange-rate/differences/$currencyPairCode")
+                .accept(MediaType.APPLICATION_JSON)
+        )
+            .andExpect(status().isOk)
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.pair").value(currencyPairCode))
+            .andExpect(jsonPath("$.rateDifference").value("0.123456"))
+    }
+
+    @Test
+    fun `getDifferences - currencyLayerWebService not available`() {
+        // Data
+        val currencyPairCode = "CZKHUF"
+
+        // Behaviour
+        every { exchangeRateService.getCurrencyLayerDiffs(currencyPairCode) } throws SwaplyException(errorCode = ErrorCode.CURRENCY_LAYER_EXCHANGE_RATES_FAILED, message = "CurrencyLayerWebService not available")
+
+        // Test
+        mockMvc.perform(
+            get("/$V1_BASE_URL/exchange-rate/differences/$currencyPairCode")
+                .accept(MediaType.APPLICATION_JSON)
+        )
+            .andExpect(status().is5xxServerError)
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.status").value(ErrorCode.CURRENCY_LAYER_EXCHANGE_RATES_FAILED.httpStatus.value()))
+            .andExpect(jsonPath("$.code").value(ErrorCode.CURRENCY_LAYER_EXCHANGE_RATES_FAILED.name))
+            .andExpect(jsonPath("$.message").value("CurrencyLayerWebService not available"))
     }
 
 }
