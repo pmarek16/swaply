@@ -11,8 +11,28 @@ GET http://localhost:9000/actuator/health
   });
 %}
 
-### GET Swaply API documentation
+### OPTIONS Swaply API documentation
+OPTIONS http://localhost:8080/api-docs
+
+> {%
+  client.test("Request executed successfully", function() {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
+### UNAUTHORIZED Swaply API documentation
 GET http://localhost:8080/api-docs
+
+> {%
+  client.test("Request unathorized", function() {
+    client.assert(response.status === 401, "Response status is not 401");
+  });
+%}
+
+### GET Swaply API documentation
+@auth = YWRtaW46YWRtaW4=
+GET http://localhost:8080/api-docs
+Authorization: Basic {{auth}}
 
 > {%
   client.test("Request executed successfully", function() {
@@ -22,6 +42,7 @@ GET http://localhost:8080/api-docs
 
 ### Get currencies
 GET http://localhost:8080/api/v1/exchange-rate/currency-pairs
+Authorization: Basic {{auth}}
 
 > {%
   client.test("Request executed successfully", function() {
@@ -32,6 +53,7 @@ GET http://localhost:8080/api/v1/exchange-rate/currency-pairs
 ### Get exchange rates diff
 @currencyPairCode = CZKHUF
 GET http://127.0.0.1:8080/api/v1/exchange-rate/differences/{{currencyPairCode}}
+Authorization: Basic {{auth}}
 
 > {%
   client.test("Request executed successfully", function() {

@@ -2,6 +2,10 @@ spring:
   cache:
     jcache:
       config: classpath:ehcache.xml
+  security:
+    user:
+      name: admin      # override defaults eg. as environment variable
+      password: admin  # override defaults eg. as environment variable
 
 server:
   shutdown: graceful
