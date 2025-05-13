@@ -12,4 +12,12 @@ Vytvořte Spring Boot aplikaci (Kotlin případně Java), která bude mít násl
  - Služba bude zabezpečená pomocí Basic Auth nebo Oauth (použijte případně Google jako OAuth server)
 
 # Řešení
- - healthcheck endpoint - příklad volání je v souboru [swaply.http](http-client/swaply.http) 
+Příklady volání jsou v souboru [swaply.http](http-client/swaply.http)
+ - healthcheck endpoint - GET [/actuator/health](http://localhost:9000/actuator/health)
+ - API Seznam podporovaných párů měn - GET [/exchange-rate/currency-pairs](http://localhost:8080/api/v1/exchange-rate/currency-pairs)
+ - API Swaply aplikace je vystavené na URL - GET [/api-docs](http://localhost:8080/api-docs)
+
+Poznámky k řešení
+ - u ČNB webové služeby chybí u XML navázané XSD (nelze ani dohledat) - z něj bych přímo vygeneroval Kotlin data classes
+   pro klienta. Takto se to musí udržovat ručně. CSV jsem nakonec zvolil proto, že jsem nedávno pracoval se zajímavou 
+   knihovnou OpenCSV, která umí mapovat pomocí anotací

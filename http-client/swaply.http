@@ -10,3 +10,21 @@ GET http://localhost:9000/actuator/health
     client.assert(response.body.status === "UP", "Status is not UP");
   });
 %}
+
+### GET Swaply API documentation
+GET http://localhost:8080/api-docs
+
+> {%
+  client.test("Request executed successfully", function() {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
+### Get currencies
+GET http://localhost:8080/api/v1/exchange-rate/currency-pairs
+
+> {%
+  client.test("Request executed successfully", function() {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
