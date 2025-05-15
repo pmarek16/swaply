@@ -1,0 +1,25 @@
+name: Check
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches: [ "**" ]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: maven
+
+      - name: Test
+        run: ./mvnw clean verify
+
