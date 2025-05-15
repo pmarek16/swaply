@@ -21,6 +21,12 @@ management:
     health:
       show-details: always
 
+logging:
+  pattern:
+    level: "%5p [corId-%X{correlation-id}]"
+  level:
+    cz.pm2k.swaply: DEBUG
+
 springdoc:
   use-fqn: true
   swagger-ui:
