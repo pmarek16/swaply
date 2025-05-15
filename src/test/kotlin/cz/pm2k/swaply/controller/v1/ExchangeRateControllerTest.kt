@@ -10,8 +10,10 @@ import cz.pm2k.swaply.model.ExchangeRateDiff
 import cz.pm2k.swaply.service.ExchangeRateService
 import io.mockk.every
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.http.MediaType
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
@@ -20,6 +22,8 @@ import kotlin.test.Test
 @WebMvcTest(controllers = [ExchangeRateController::class])
 class ExchangeRateControllerTest(
     @Autowired private val mockMvc: MockMvc,
+    @Value("\${spring.security.user.name}") private val username: String,
+    @Value("\${spring.security.user.password}") private val password: String,
 ) {
 
     @MockkBean
@@ -44,6 +48,7 @@ class ExchangeRateControllerTest(
         mockMvc.perform(
             get(BASE_URL)
                 .accept(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.httpBasic(username, password))
         )
             .andExpect(status().isOk)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -62,6 +67,7 @@ class ExchangeRateControllerTest(
         mockMvc.perform(
             get(BASE_URL)
                 .accept(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.httpBasic(username, password))
         )
             .andExpect(status().is5xxServerError)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -86,6 +92,7 @@ class ExchangeRateControllerTest(
         mockMvc.perform(
             get("/$V1_BASE_URL/exchange-rate/differences/$currencyPairCode")
                 .accept(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.httpBasic(username, password))
         )
             .andExpect(status().isOk)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -105,6 +112,7 @@ class ExchangeRateControllerTest(
         mockMvc.perform(
             get("/$V1_BASE_URL/exchange-rate/differences/$currencyPairCode")
                 .accept(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.httpBasic(username, password))
         )
             .andExpect(status().is5xxServerError)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
