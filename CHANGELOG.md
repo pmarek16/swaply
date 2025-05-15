@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/pmarek16/swaply/compare/v1.0.0...v1.1.0) (2025-05-15)
+
+
+### Features
+
+* added correlationId to logback ([e212a5d](https://github.com/pmarek16/swaply/commit/e212a5d06e95a28f3d475eed4a241ba89d21cb5e))
+
 ## 1.0.0 (2025-05-14)
 
 
