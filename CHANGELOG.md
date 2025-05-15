@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/pmarek16/swaply/compare/v1.0.0...v1.1.0) (2025-05-15)
+
+
+### Features
+
+* added check action ([0fcb7b0](https://github.com/pmarek16/swaply/commit/0fcb7b0c4c618e03ae96f55501870db9c6c8e423))
+
 ## 1.0.0 (2025-05-14)
 
 
