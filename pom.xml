@@ -23,7 +23,7 @@
         <logback-contrib.version>0.1.5</logback-contrib.version>
         <springdoc-openapi-starter.version>2.8.8</springdoc-openapi-starter.version>
 
-        <mockk-jvm-kotlin.version>1.14.2</mockk-jvm-kotlin.version>
+        <mockk-jvm-kotlin.version>1.14.4</mockk-jvm-kotlin.version>
         <mockwebserver.version>4.12.0</mockwebserver.version>
         <springmockk.version>4.0.2</springmockk.version>
     </properties>
